@@ -1,0 +1,20 @@
+## --- Visual Studio ---
+.vs/
+[Bb]in/
+[Oo]bj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+## --- Archivos de Compilación ---
+DEBUG/
+RELEASE/
+debug/
+release/
+x64/
+x86/
+
+## --- Otros ---
+*.log
+.DS_Store (para Mac)

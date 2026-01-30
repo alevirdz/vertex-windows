@@ -4,16 +4,20 @@
 Se presenta la siguiente estructura usando MVVM (Model-View-ViewModel).
 Vertex es un núcleo para cargar diferentes vistas dinamicamente.
 
-Estructura
+### Estructura
 
+```
 Vertex/
 ├── Vertex.App/       # WPF -> EXE
 ├── Vertex.Core/      # Modelos, interfaces y utilidades
 ├── Vertex.Modules/   # Módulos opcionales
 └── Vertex.Services/  # Servicios transversales
+```
 
-Estructura detallada
+### Estructura detallada
 
+
+```
 Vertex/
 │
 ├── Vertex.App/                # Proyecto WPF -> EXE
@@ -51,7 +55,7 @@ Vertex/
 │   └── MenuService.cs         # Generación de menú dinámico
 │
 └── Vertex.Tests/              # Unit tests y tests de integración
-
+```
 
 
 
