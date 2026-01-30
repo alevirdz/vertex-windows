@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "1SmjboBPvbM=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\isaac.rodriguez\\Documents\\www\\CoreDesktop\\Vertex\\Vertex.Services\\Vertex.Services.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\isaac.rodriguez\\.nuget\\packages\\system.net.http.json\\8.0.0\\system.net.http.json.8.0.0.nupkg.sha512",
+    "C:\\Users\\isaac.rodriguez\\.nuget\\packages\\system.text.encodings.web\\8.0.0\\system.text.encodings.web.8.0.0.nupkg.sha512",
+    "C:\\Users\\isaac.rodriguez\\.nuget\\packages\\system.text.json\\8.0.0\\system.text.json.8.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}

@@ -1,0 +1,11 @@
+C:\Users\isaac.rodriguez\Documents\www\CoreDesktop\Vertex\Vertex.Core\bin\Debug\net8.0\Vertex.Core.deps.json
+C:\Users\isaac.rodriguez\Documents\www\CoreDesktop\Vertex\Vertex.Core\bin\Debug\net8.0\Vertex.Core.dll
+C:\Users\isaac.rodriguez\Documents\www\CoreDesktop\Vertex\Vertex.Core\bin\Debug\net8.0\Vertex.Core.pdb
+C:\Users\isaac.rodriguez\Documents\www\CoreDesktop\Vertex\Vertex.Core\obj\Debug\net8.0\Vertex.Core.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\isaac.rodriguez\Documents\www\CoreDesktop\Vertex\Vertex.Core\obj\Debug\net8.0\Vertex.Core.AssemblyInfoInputs.cache
+C:\Users\isaac.rodriguez\Documents\www\CoreDesktop\Vertex\Vertex.Core\obj\Debug\net8.0\Vertex.Core.AssemblyInfo.cs
+C:\Users\isaac.rodriguez\Documents\www\CoreDesktop\Vertex\Vertex.Core\obj\Debug\net8.0\Vertex.Core.csproj.CoreCompileInputs.cache
+C:\Users\isaac.rodriguez\Documents\www\CoreDesktop\Vertex\Vertex.Core\obj\Debug\net8.0\Vertex.Core.dll
+C:\Users\isaac.rodriguez\Documents\www\CoreDesktop\Vertex\Vertex.Core\obj\Debug\net8.0\refint\Vertex.Core.dll
+C:\Users\isaac.rodriguez\Documents\www\CoreDesktop\Vertex\Vertex.Core\obj\Debug\net8.0\Vertex.Core.pdb
+C:\Users\isaac.rodriguez\Documents\www\CoreDesktop\Vertex\Vertex.Core\obj\Debug\net8.0\ref\Vertex.Core.dll
