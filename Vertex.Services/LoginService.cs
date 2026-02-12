@@ -61,7 +61,7 @@ namespace Vertex.Services
                 var currentToken = _sessionService.Token;
                 if (string.IsNullOrWhiteSpace(currentToken)) return false;
 
-                var response = await _httpClient.PostAsync("auth/refresh", null);
+                var response = await _httpClient.PostAsync("refresh", null);
                 if (!response.IsSuccessStatusCode) return false;
 
                 var refreshResult = await response.Content.ReadFromJsonAsync<LoginResponse>();
@@ -84,5 +84,25 @@ namespace Vertex.Services
                 return false;
             }
         }
+
+        public async Task LogoutAsync()
+        {
+            try
+            {
+                var response = await _httpClient.PostAsync("logout", null);
+                response.EnsureSuccessStatusCode();
+            }
+            catch
+            {
+                
+            }
+            finally
+            {
+                _sessionService.ClearSession();
+                _authToken = string.Empty;
+                _httpClient.DefaultRequestHeaders.Authorization = null;
+            }
+        }
+
     }
 }

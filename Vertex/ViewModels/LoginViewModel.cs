@@ -60,7 +60,7 @@ public class LoginViewModel : INotifyPropertyChanged
             LoginResponse result = await _loginService.LoginAsync(Email, Password);
             if (result.Success && result.Data != null)
             {
-                var plantilla = new PlantillaWindow(result.Data);
+                var plantilla = new PlantillaWindow(result.Data, _loginService, _notificationService);
                 plantilla.Show();
 
                 //Cerramos ventana (Context) de login

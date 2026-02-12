@@ -7,5 +7,6 @@ namespace Vertex.Core.Interfaces
     {
         Task<LoginResponse> LoginAsync(string email, string password);
         Task<bool> RefreshAuthTokenAsync();
+        Task LogoutAsync();
     }
 }
