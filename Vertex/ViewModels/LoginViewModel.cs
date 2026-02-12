@@ -1,11 +1,11 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using Vertex.App.Views;
+using Vertex.Core.Interfaces;
 using Vertex.Core.Models;
-using Vertex.Services.ApiService;
+
 
 namespace Vertex.App.ViewModels;
 

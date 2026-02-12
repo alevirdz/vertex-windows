@@ -10,5 +10,6 @@
 		<ProjectReference Include="..\Vertex.Core\Vertex.Core.csproj" />
         <PackageReference Include="System.Net.Http.Json" Version="8.0.0" />
     </ItemGroup>
-
+	
+	
 </Project>

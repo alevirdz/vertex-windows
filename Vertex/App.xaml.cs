@@ -1,55 +1,42 @@
 ﻿using System;
 using System.Windows;
 using Microsoft.Extensions.Configuration;
-using Vertex.App.ViewModels;
+using Microsoft.Extensions.DependencyInjection;
 using Vertex.App.Views;
-using Vertex.Services.ApiService;
 
-namespace Vertex.App;
-
-public partial class App : Application
+namespace Vertex.App
 {
-    public static IConfiguration AppConfiguration { get; private set; } = null!;
-
-    protected override void OnStartup(StartupEventArgs e)
+    public partial class App : Application
     {
-        base.OnStartup(e);
+        public static IServiceProvider ServiceProvider { get; private set; } = null!;
+        public static IConfiguration AppConfiguration { get; private set; } = null!;
 
-        try
+        protected override void OnStartup(StartupEventArgs e)
         {
-            AppConfiguration = new ConfigurationBuilder()
-                .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                .Build();
+            base.OnStartup(e);
 
-            string apiBaseUrl = AppConfiguration["ApiConfiguration:ApiBaseUrl"] ?? throw new InvalidOperationException("API base URL is not defined in configuration.");
-            string timeoutString = AppConfiguration["ApiConfiguration:RequestTimeoutInSeconds"] ?? throw new InvalidOperationException("API request timeout is not defined in configuration.");
+            try
+            {
+                //Cargar configuración
+                AppConfiguration = new ConfigurationBuilder()
+                    .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+                    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                    .Build();
 
-            if (!int.TryParse(timeoutString, out int requestTimeoutInSeconds))
-                throw new FormatException("API request timeout is not a valid integer");
+                //Configurar servicios
+                ServiceProvider = Bootstrapper.ConfigureServices(AppConfiguration);
 
-            // Configurar HttpClientProvider
-            HttpClientProvider.Configure(apiBaseUrl, requestTimeoutInSeconds);
-
-            var loginService = new LoginService();
-            var loginViewModel = new LoginViewModel(loginService);
-            var loginView = new LoginView(loginViewModel);
-
-            this.MainWindow = loginView;
-            loginView.Show();
-
-        }
-        catch (Exception ex)
-        {
-            MessageBox.Show(
-                $"Error initializing application configuration: {ex.Message}",
-                "Configuration Error",
-                MessageBoxButton.OK,
-                MessageBoxImage.Error
-            );
-
-            // Detener la aplicación si no se puede configurar
-            Current.Shutdown();
+                //Mostrar ventana inicial
+                var loginView = ServiceProvider.GetRequiredService<LoginView>();
+                MainWindow = loginView;
+                loginView.Show();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error inicializando la app: {ex.Message}", "Error",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+                Current.Shutdown();
+            }
         }
     }
 }
