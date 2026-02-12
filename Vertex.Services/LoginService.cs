@@ -1,56 +1,88 @@
-﻿using Vertex.Core.Interfaces;
-using Vertex.Core.Models;
-using System.Net.Http;
-using System.Net.Http.Headers;
+﻿using System.Net.Http.Headers;
 using System.Net.Http.Json;
-using System.Threading.Tasks;
-using Vertex.Services.ApiService;
+using Vertex.Core.Interfaces;
+using Vertex.Core.Models;
 
 namespace Vertex.Services
 {
     public class LoginService : ILoginService
     {
-        private readonly HttpClient _httpClient = HttpClientProvider.Instance;
+        private readonly HttpClient _httpClient;
         private readonly ISessionService _sessionService;
         private string _authToken = string.Empty;
 
-        public LoginService(ISessionService sessionService)
+        public LoginService(HttpClient httpClient, ISessionService sessionService)
         {
+            _httpClient = httpClient;
             _sessionService = sessionService;
         }
 
         public async Task<LoginResponse> LoginAsync(string email, string password)
         {
-            var response = await _httpClient.PostAsJsonAsync("login", new { email, password });
-            var loginResponse = await response.Content.ReadFromJsonAsync<LoginResponse>();
-
-            if (loginResponse?.Success == true && loginResponse.Data != null)
+            try
             {
-                _authToken = loginResponse.Data.Token;
-                _sessionService.SetSession(_authToken, loginResponse.Data.User);
-                _httpClient.DefaultRequestHeaders.Authorization =
-                    new AuthenticationHeaderValue("Bearer", _authToken);
-            }
+                var response = await _httpClient.PostAsJsonAsync("login", new { email, password });
 
-            return loginResponse ?? new LoginResponse { Success = false, Message = "Invalid response" };
+                if (!response.IsSuccessStatusCode)
+                {
+                    return new LoginResponse
+                    {
+                        Success = false,
+                        Message = $"HTTP Error: {response.StatusCode}"
+                    };
+                }
+
+                var loginResponse = await response.Content.ReadFromJsonAsync<LoginResponse>();
+
+                if (loginResponse?.Success == true && loginResponse.Data != null)
+                {
+                    _authToken = loginResponse.Data.Token;
+                    _sessionService.SetSession(_authToken, loginResponse.Data.User);
+                    _httpClient.DefaultRequestHeaders.Authorization =
+                    new AuthenticationHeaderValue("Bearer", _authToken);
+                }
+
+                return loginResponse ?? new LoginResponse { Success = false, Message = "Invalid response" };
+            }
+            catch (HttpRequestException) {
+                return new LoginResponse
+                {
+                    Success = false,
+                    Message = "Unable to connect to server"
+                };
+            }
+                
         }
 
         public async Task<bool> RefreshAuthTokenAsync()
         {
-            if (string.IsNullOrEmpty(_authToken)) return false;
-
-            var response = await _httpClient.PostAsync("auth/refresh", null);
-            var refreshResult = await response.Content.ReadFromJsonAsync<LoginResponse>();
-
-            if (refreshResult?.Success == true && refreshResult.Data != null)
+            try
             {
-                _authToken = refreshResult.Data.Token;
-                _sessionService.SetSession(_authToken, refreshResult.Data.User ?? _sessionService.CurrentUser!);
-                _httpClient.DefaultRequestHeaders.Authorization =
-                    new AuthenticationHeaderValue("Bearer", _authToken);
-            }
+                var currentToken = _sessionService.Token;
+                if (string.IsNullOrWhiteSpace(currentToken)) return false;
 
-            return refreshResult?.Success ?? false;
+                var response = await _httpClient.PostAsync("auth/refresh", null);
+                if (!response.IsSuccessStatusCode) return false;
+
+                var refreshResult = await response.Content.ReadFromJsonAsync<LoginResponse>();
+                if (refreshResult?.Success != true || refreshResult.Data == null)
+                    return false;
+
+                var newToken = refreshResult.Data.Token;
+                var user = refreshResult.Data.User ?? _sessionService.CurrentUser;
+
+                if (string.IsNullOrWhiteSpace(newToken) || user == null)
+                    return false;
+
+                _sessionService.SetSession(newToken, user);
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", newToken);
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
         }
     }
 }

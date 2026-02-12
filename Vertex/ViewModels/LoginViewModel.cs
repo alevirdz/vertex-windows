@@ -12,13 +12,16 @@ namespace Vertex.App.ViewModels;
 public class LoginViewModel : INotifyPropertyChanged
 {
     private readonly ILoginService _loginService;
+    private readonly INotificationService _notificationService;
 
-    public LoginViewModel(ILoginService loginService)
+    public LoginViewModel(ILoginService loginService, INotificationService notificationService)
     {
         _loginService = loginService;
+        _notificationService = notificationService;
+
         LoginCommand = new AsyncAndWaitCommand(
             async _ => await ExecuteLoginAsync(),
-            _ => !string.IsNullOrWhiteSpace(Email) && !string.IsNullOrWhiteSpace(Password)
+            _ => !IsLoading && !string.IsNullOrWhiteSpace(Email) && !string.IsNullOrWhiteSpace(Password)
         );
     }
 
@@ -36,12 +39,24 @@ public class LoginViewModel : INotifyPropertyChanged
         set { _password = value; OnPropertyChanged(); }
     }
 
+    private bool _isLoading;
+    public bool IsLoading
+    {
+        get => _isLoading;
+        set { _isLoading = value; OnPropertyChanged(); }
+    }
+
+
     public ICommand LoginCommand { get; }
 
     private async Task ExecuteLoginAsync(object? parameter = null)
     {
+        if (IsLoading) return;
+
         try
         {
+            IsLoading = true;
+
             LoginResponse result = await _loginService.LoginAsync(Email, Password);
             if (result.Success && result.Data != null)
             {
@@ -53,12 +68,16 @@ public class LoginViewModel : INotifyPropertyChanged
             }
             else
             {
-                MessageBox.Show($"Login failed: {result.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                await _notificationService.ShowErrorAsync(result.Message);
             }
         }
         catch (System.Exception ex)
         {
-            MessageBox.Show($"Error during login: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            await _notificationService.ShowErrorAsync(ex.Message);
+        }
+        finally
+        {
+            IsLoading = false;
         }
     }
 

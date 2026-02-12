@@ -1,5 +1,7 @@
-﻿using System.Windows;
+﻿using System.Globalization;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 using Vertex.App.ViewModels;
 
@@ -17,12 +19,8 @@ public partial class LoginView : Window
 
     private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
     {
-        if (DataContext is LoginViewModel viewModel && sender is PasswordBox passwordBox)
-        {
-            viewModel.Password = passwordBox.Password;
-            // Forzar reevaluación del comando
-            CommandManager.InvalidateRequerySuggested();
-        }
+        if (DataContext is LoginViewModel vm)
+            vm.Password = ((PasswordBox)sender).Password;
     }
 
 }

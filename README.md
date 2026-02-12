@@ -32,6 +32,7 @@ Vertex/
 │   ├── Resources/            # Estilos, brushes, themes
 │   ├── Services/             # Servicios UI (diálogos, navegación)
 │   └── Controls/             # Controles reutilizables
+│    ├── Converters/          # Transformar valores
 │
 ├── Vertex.Core/               # Lógica compartida y modelos
 │   ├── Models/               # Modelos de datos

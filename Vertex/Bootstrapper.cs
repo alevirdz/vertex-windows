@@ -1,10 +1,10 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Vertex.App.Services;
 using Vertex.App.ViewModels;
 using Vertex.App.Views;
 using Vertex.Core.Interfaces;
 using Vertex.Services;
-using Vertex.Services.ApiService;
 
 namespace Vertex.App
 {
@@ -17,11 +17,17 @@ namespace Vertex.App
             // Configuración HttpClientProvider
             var apiBaseUrl = configuration["ApiConfiguration:ApiBaseUrl"]!;
             var timeoutSeconds = int.Parse(configuration["ApiConfiguration:RequestTimeoutInSeconds"]!);
-            HttpClientProvider.Configure(apiBaseUrl, timeoutSeconds);
 
             //Servicios singleton
             services.AddSingleton<ISessionService, SessionService>();
-            services.AddSingleton<ILoginService, LoginService>();
+            services.AddSingleton<INavigationService, NavigationService>();
+            services.AddSingleton<INotificationService, NotificationService>();
+            //Por favor, mantén  el orden
+            services.AddHttpClient<ILoginService, LoginService>(client =>
+            {
+                client.BaseAddress = new Uri(apiBaseUrl);
+                client.Timeout = TimeSpan.FromSeconds(timeoutSeconds);
+            });
 
             //ViewModels
             services.AddTransient<LoginViewModel>();
