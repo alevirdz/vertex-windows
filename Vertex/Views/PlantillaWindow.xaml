@@ -144,15 +144,16 @@
                     <StackPanel Grid.Column="1"
                                 Orientation="Horizontal"
                                 VerticalAlignment="Center">
-
-                        <Ellipse Width="35"
-                                 Height="35"
-                                 Fill="#6366F1"
-                                 Margin="0,0,10,0"/>
-
-                        <TextBlock Text="{Binding User.Name}"
-                                   VerticalAlignment="Center"
-                                   FontWeight="SemiBold"/>
+                        <Grid Width="35" Height="35" Margin="0,0,10,0">
+                            <Ellipse Fill="#6366F1"/>
+                            <TextBlock 
+                                Text="{Binding UserInitials}"
+                                Foreground="White"
+                                FontWeight="Bold"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"/>
+                        </Grid>
+                        <TextBlock Text="{Binding User.Name}" VerticalAlignment="Center" FontWeight="SemiBold"/>
                     </StackPanel>
                 </Grid>
             </Border>

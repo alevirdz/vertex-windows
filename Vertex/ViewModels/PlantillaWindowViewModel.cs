@@ -31,13 +31,18 @@ namespace Vertex.App.ViewModels
             set { _isLoggingOut = value; OnPropertyChanged(); }
         }
 
+        public User User { get; }
+        public string UserInitials => string.Join("", (User?.Name ?? "").Split(' ').Select(x => x[0])).ToUpper();
+
         public ICommand LogoutCommand { get; }
 
-        public PlantillaWindowViewModel(Menu menu, ILoginService loginService, INotificationService notificationService)
+        public PlantillaWindowViewModel(LoginData loginData, ILoginService loginService, INotificationService notificationService)
         {
-            MenuItems = new ObservableCollection<MenuItem>(menu.Items);
+            MenuItems = new ObservableCollection<MenuItem>(loginData.Menu.Items);
+            User = loginData.User;
             _loginService = loginService;
             _notificationService = notificationService;
+            
 
             LogoutCommand = new AsyncAndWaitCommand(_ => ExecuteLogout());
         }

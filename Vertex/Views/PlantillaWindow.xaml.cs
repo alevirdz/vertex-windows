@@ -15,7 +15,7 @@ public partial class PlantillaWindow : Window
     public PlantillaWindow(LoginData loginData, ILoginService loginService, INotificationService notificationService)
     {
         InitializeComponent();
-        DataContext = new PlantillaWindowViewModel(loginData.Menu, loginService, notificationService);
+        DataContext = new PlantillaWindowViewModel(loginData, loginService, notificationService);
 
         this.Title = $"Bienvenido, {loginData.User.Name}";
     }
